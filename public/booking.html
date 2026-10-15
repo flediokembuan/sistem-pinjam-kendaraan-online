@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulir Pinjam Kendaraan Online - MotoPinjam</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Leaflet CSS for Location Picker -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow">
+          <i class="fa-solid fa-motorcycle"></i>
+        </div>
+        <span class="font-extrabold text-lg text-slate-900">Moto<span class="text-blue-600">Pinjam</span></span>
+      </a>
+      <a href="/" class="text-xs font-bold text-slate-600 hover:text-blue-600 flex items-center gap-1.5">
+        <i class="fa-solid fa-arrow-left"></i> Kembali ke Katalog
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Booking Form Container -->
+  <main class="max-w-6xl mx-auto px-4 py-8 flex-1 w-full">
+    <div class="mb-8">
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Formulir Peminjaman Kendaraan</h1>
+      <p class="text-slate-600 text-sm mt-1">Lengkapi data durasi sewa, titik penjemputan, serta foto muka & KTP sebagai syarat jaminan legal.</p>
+    </div>
+
+    <form id="bookingForm" class="grid grid-cols-1 lg:grid-cols-12 gap-8" enctype="multipart/form-data">
+      
+      <!-- LEFT COLUMN: Forms -->
+      <div class="lg:col-span-8 space-y-6">
+
+        <!-- 1. PILIH MOTOR & DURASI -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-center gap-3 mb-4 pb-3 border-b border-slate-100">
+            <span class="w-7 h-7 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center">1</span>
+            <h2 class="font-bold text-slate-900 text-base">Pilihan Kendaraan & Durasi Pinjaman</h2>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Merek Motor Dropdown -->
+            <div class="sm:col-span-2">
+              <label for="vehicleId" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Pilih Merek & Model Motor <span class="text-rose-500">*</span>
+              </label>
+              <select id="vehicleId" name="vehicleId" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none font-medium">
+                <option value="" disabled selected>-- Memuat daftar motor --</option>
+              </select>
+            </div>
+
+            <!-- Durasi Berapa Hari -->
+            <div>
+              <label for="durationDays" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Pinjaman Berapa Hari? <span class="text-rose-500">*</span>
+              </label>
+              <div class="relative">
+                <input type="number" id="durationDays" name="durationDays" min="1" max="30" value="1" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none font-bold pr-12">
+                <span class="absolute right-3 top-2.5 text-xs text-slate-400 font-bold">HARI</span>
+              </div>
+              <p class="text-[11px] text-slate-600 mt-1">Minimal sewa 1 hari, maksimal 30 hari.</p>
+            </div>
+
+            <!-- Tanggal Mulai Pinjam -->
+            <div>
+              <label for="startDate" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Tanggal Mulai Pinjam <span class="text-rose-500">*</span>
+              </label>
+              <input type="date" id="startDate" name="startDate" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none font-medium">
+              <p id="returnDateInfo" class="text-[11px] text-blue-600 font-semibold mt-1">Estimasi Pengembalian: -</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. LOKASI TEMPAT YANG AKAN DIPINJAM / DIJEMPUT -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-center gap-3 mb-4 pb-3 border-b border-slate-100">
+            <span class="w-7 h-7 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center">2</span>
+            <h2 class="font-bold text-slate-900 text-base">Lokasi Tempat Yang Akan Dipinjam / Dijemput</h2>
+          </div>
+
+          <div class="space-y-4">
+            <!-- Quick preset location buttons -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Titik Populer Penjemputan / Antar:
+              </label>
+              <div class="flex flex-wrap gap-2 text-xs">
+                <button type="button" onclick="setPresetLocation('Kampus UNKLAB Gate 1, Airmadidi', 1.4170, 124.9829)" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 font-semibold transition-colors">
+                  🎓 Kampus UNKLAB Gate 1
+                </button>
+                <button type="button" onclick="setPresetLocation('Kawasan Megamas Manado (Megamall)', 1.4870, 124.8370)" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 font-semibold transition-colors">
+                  🛍️ Kawasan Megamas
+                </button>
+                <button type="button" onclick="setPresetLocation('Bandara Sam Ratulangi (Arrival Gate)', 1.5498, 124.9262)" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 font-semibold transition-colors">
+                  ✈️ Bandara Sam Ratulangi
+                </button>
+                <button type="button" onclick="setPresetLocation('Pool Utama Rental (Jl. Raya Manado-Bitung)', 1.4230, 124.9780)" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 font-semibold transition-colors">
+                  🏢 Pool Utama Kami
+                </button>
+              </div>
+            </div>
+
+            <!-- Address input -->
+            <div>
+              <label for="pickupLocation" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Alamat / Keterangan Lokasi Jemput <span class="text-rose-500">*</span>
+              </label>
+              <input type="text" id="pickupLocation" name="pickupLocation" required placeholder="Contoh: Jl. Arnold Mononutu No. 12, Airmadidi" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none font-medium">
+            </div>
+
+            <!-- Leaflet map picker -->
+            <div>
+              <div class="flex items-center justify-between text-xs text-slate-500 mb-1.5">
+                <span class="font-semibold text-slate-700"><i class="fa-solid fa-map-pin text-blue-600 mr-1"></i> Pilih Koordinat di Peta:</span>
+                <span class="text-[11px] text-blue-600">Klik peta untuk geser titik</span>
+              </div>
+              <div id="pickerMap" class="w-full h-56 rounded-xl border border-slate-300 overflow-hidden shadow-inner"></div>
+              
+              <!-- Hidden coordinate inputs -->
+              <input type="hidden" id="pickupLat" name="pickupLat" value="1.4170">
+              <input type="hidden" id="pickupLng" name="pickupLng" value="124.9829">
+              <p class="text-[11px] text-slate-600 mt-1 font-mono" id="coordDisplay">
+                Koordinat dipilih: Lat 1.417000, Lng 124.982900
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. DATA ORANG YANG MEMINJAM & JAMINAN -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-center gap-3 mb-4 pb-3 border-b border-slate-100">
+            <span class="w-7 h-7 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center">3</span>
+            <h2 class="font-bold text-slate-900 text-base">Data Peminjam & Jaminan (Foto Muka & KTP)</h2>
+          </div>
+
+          <div class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Nama Lengkap -->
+              <div>
+                <label for="fullName" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Nama Lengkap Sesuai KTP <span class="text-rose-500">*</span>
+                </label>
+                <input type="text" id="fullName" name="fullName" required placeholder="Nama Lengkap" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              </div>
+
+              <!-- NIK KTP -->
+              <div>
+                <label for="nik" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Nomor KTP / NIK (16 Digit) <span class="text-rose-500">*</span>
+                </label>
+                <input type="text" id="nik" name="nik" required maxlength="16" placeholder="71xxxxxxxxxxxxxx" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none font-mono">
+              </div>
+
+              <!-- No WhatsApp / HP -->
+              <div>
+                <label for="phone" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Nomor WhatsApp / HP Aktif <span class="text-rose-500">*</span>
+                </label>
+                <input type="tel" id="phone" name="phone" required placeholder="08xxxxxxxxxx" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              </div>
+
+              <!-- Email -->
+              <div>
+                <label for="email" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Alamat Email
+                </label>
+                <input type="email" id="email" name="email" placeholder="nama@email.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              </div>
+            </div>
+
+            <!-- Alamat Domisili -->
+            <div>
+              <label for="address" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Alamat Domisili / Tempat Tinggal Sekarang <span class="text-rose-500">*</span>
+              </label>
+              <textarea id="address" name="address" rows="2" required placeholder="Tuliskan alamat lengkap..." class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+            </div>
+
+            <!-- DOKUMEN FOTO MUKA & KTP SEBAGAI JAMINAN -->
+            <div class="pt-4 border-t border-slate-100">
+              <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                <i class="fa-solid fa-camera text-blue-600"></i> Upload Foto Jaminan (Wajib & Aman):
+              </h3>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                
+                <!-- Upload Foto Muka -->
+                <div class="border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-2xl p-4 text-center bg-slate-50 transition-colors">
+                  <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 mx-auto flex items-center justify-center text-xl mb-2">
+                    <i class="fa-solid fa-user"></i>
+                  </div>
+                  <label class="block text-xs font-bold text-slate-800 mb-1">
+                    Foto Muka (Selfie) <span class="text-rose-500">*</span>
+                  </label>
+                  <p class="text-[11px] text-slate-600 mb-3">Wajah menghadap depan, tanpa kacamata hitam.</p>
+                  
+                  <input type="file" id="selfiePhoto" name="selfiePhoto" accept="image/*" class="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer" onchange="previewImage(this, 'selfiePreview')">
+                  
+                  <div id="selfiePreview" class="mt-3 hidden">
+                    <img src="" alt="Preview Muka" class="h-28 w-28 object-cover rounded-xl mx-auto border-2 border-blue-400 shadow">
+                  </div>
+                </div>
+
+                <!-- Upload Foto KTP -->
+                <div class="border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-2xl p-4 text-center bg-slate-50 transition-colors">
+                  <div class="w-12 h-12 rounded-full bg-indigo-100 text-indigo-600 mx-auto flex items-center justify-center text-xl mb-2">
+                    <i class="fa-solid fa-id-card"></i>
+                  </div>
+                  <label class="block text-xs font-bold text-slate-800 mb-1">
+                    Foto KTP Asli <span class="text-rose-500">*</span>
+                  </label>
+                  <p class="text-[11px] text-slate-600 mb-3">Foto KTP terlihat jelas terbaca dan tidak silau.</p>
+                  
+                  <input type="file" id="ktpPhoto" name="ktpPhoto" accept="image/*" class="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer" onchange="previewImage(this, 'ktpPreview')">
+                  
+                  <div id="ktpPreview" class="mt-3 hidden">
+                    <img src="" alt="Preview KTP" class="h-28 w-44 object-cover rounded-xl mx-auto border-2 border-blue-400 shadow">
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Jaminan Tambahan -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+              <div>
+                <label for="guaranteeType" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Dokumen Jaminan Fisik Tambahan <span class="text-rose-500">*</span>
+                </label>
+                <select id="guaranteeType" name="guaranteeType" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                  <option value="KTP Asli + Kartu Tanda Mahasiswa (KTM)">KTP Asli + Kartu Tanda Mahasiswa (KTM)</option>
+                  <option value="KTP Asli + SIM A">KTP Asli + SIM A</option>
+                  <option value="KTP Asli + NPWP">KTP Asli + NPWP</option>
+                  <option value="KTP Asli + Paspor">KTP Asli + Paspor</option>
+                  <option value="KTP Asli + Deposit Tunai">KTP Asli + Deposit Tunai Rp 200.000</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="guaranteeNote" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Catatan Jaminan / Keterangan Tambahan
+                </label>
+                <input type="text" id="guaranteeNote" name="guaranteeNote" placeholder="Contoh: Titip KTM Kampus Unklab" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Order Summary Card -->
+      <div class="lg:col-span-4">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm sticky top-24 space-y-5">
+          <h3 class="font-bold text-slate-900 text-base flex items-center gap-2 pb-3 border-b border-slate-100">
+            <i class="fa-solid fa-receipt text-blue-600"></i>
+            <span>Ringkasan Sewa Kendaraan</span>
+          </h3>
+
+          <!-- Vehicle Thumbnail Card -->
+          <div id="summaryVehicleCard" class="flex gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
+            <div class="w-16 h-16 rounded-lg bg-slate-200 overflow-hidden shrink-0">
+              <img id="summaryVehicleImg" src="" alt="" class="w-full h-full object-cover">
+            </div>
+            <div class="overflow-hidden">
+              <h4 id="summaryVehicleName" class="font-bold text-sm text-slate-900 truncate">Pilih Motor</h4>
+              <p id="summaryVehiclePlate" class="text-xs font-mono text-slate-500">-</p>
+              <p id="summaryVehiclePrice" class="text-xs font-bold text-blue-600 mt-0.5">Rp 0 / hari</p>
+            </div>
+          </div>
+
+          <!-- Price breakdown table -->
+          <div class="space-y-2.5 text-xs text-slate-600 border-t border-b border-slate-100 py-3">
+            <div class="flex justify-between">
+              <span>Durasi Sewa:</span>
+              <span id="summaryDays" class="font-bold text-slate-900">1 Hari</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Tarif Sewa Pokok:</span>
+              <span id="summarySubtotal" class="font-medium text-slate-900">Rp 0</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Deposit Jaminan (Refundable):</span>
+              <span class="font-medium text-emerald-600">+ Rp 100.000</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Pendeteksi GPS Tracker:</span>
+              <span class="font-bold text-blue-600">GRATIS / AKTIF</span>
+            </div>
+          </div>
+
+          <!-- Total Calculation -->
+          <div class="flex justify-between items-baseline">
+            <span class="text-xs font-bold text-slate-700 uppercase">Total Biaya:</span>
+            <div class="text-right">
+              <div id="summaryTotal" class="text-xl font-extrabold text-blue-600">Rp 0</div>
+              <span class="text-[10px] text-slate-400">Termasuk deposit & fasilitas helm</span>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="submitBtn" class="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-sm shadow-lg shadow-blue-600/30 transition-all flex items-center justify-center gap-2">
+            <i class="fa-solid fa-check"></i>
+            <span>Konfirmasi & Ajukan Pinjaman</span>
+          </button>
+
+          <p class="text-[11px] text-center text-slate-600">
+            <i class="fa-solid fa-lock text-slate-600 mr-1"></i> Data KTP dan foto Anda disimpan secara aman untuk verifikasi internal rental.
+          </p>
+        </div>
+      </div>
+
+    </form>
+  </main>
+
+  <!-- Leaflet & Booking Logic Script -->
+  <script>
+    let vehicles = [];
+    let selectedVehicle = null;
+    let marker = null;
+    let map = null;
+
+    // Initialize Map for location picking
+    function initPickerMap() {
+      // Default center: Airmadidi / UNKLAB area (Minahasa Utara)
+      const defaultLat = 1.4170;
+      const defaultLng = 124.9829;
+
+      map = L.map('pickerMap').setView([defaultLat, defaultLng], 14);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      // Custom marker icon
+      const customIcon = L.divIcon({
+        className: 'custom-bike-marker marker-dipinjam',
+        html: '<i class="fa-solid fa-location-dot"></i>',
+        iconSize: [36, 36],
+        iconAnchor: [18, 36]
+      });
+
+      marker = L.marker([defaultLat, defaultLng], { draggable: true, icon: customIcon }).addTo(map);
+
+      // Map click handler
+      map.on('click', function(e) {
+        updatePickerCoordinates(e.latlng.lat, e.latlng.lng);
+      });
+
+      // Marker drag handler
+      marker.on('dragend', function(e) {
+        const pos = e.target.getLatLng();
+        updatePickerCoordinates(pos.lat, pos.lng);
+      });
+    }
+
+    function updatePickerCoordinates(lat, lng) {
+      marker.setLatLng([lat, lng]);
+      document.getElementById('pickupLat').value = lat.toFixed(6);
+      document.getElementById('pickupLng').value = lng.toFixed(6);
+      document.getElementById('coordDisplay').innerText = `Koordinat dipilih: Lat ${lat.toFixed(6)}, Lng ${lng.toFixed(6)}`;
+    }
+
+    function setPresetLocation(name, lat, lng) {
+      document.getElementById('pickupLocation').value = name;
+      updatePickerCoordinates(lat, lng);
+      if (map) {
+        map.setView([lat, lng], 15);
+      }
+    }
+
+    // Load Vehicles list into Dropdown
+    async function loadVehiclesDropdown() {
+      try {
+        const res = await fetch('/api/vehicles');
+        const json = await res.json();
+        if (json.success) {
+          vehicles = json.data;
+          const select = document.getElementById('vehicleId');
+          select.innerHTML = '<option value="" disabled>-- Pilih Merek & Model Motor --</option>';
+
+          const urlParams = new URLSearchParams(window.location.search);
+          const preselectedId = urlParams.get('id');
+
+          vehicles.forEach(v => {
+            const opt = document.createElement('option');
+            opt.value = v.id;
+            const isRented = v.status.toLowerCase() === 'dipinjam';
+            opt.disabled = isRented;
+            opt.text = `${v.name} (${v.brand}) - ${v.plateNumber} ${isRented ? '[SEDANG DIPINJAM]' : `[Tersedia - Rp ${v.dailyRate.toLocaleString('id-ID')}/hari]`}`;
+            
+            if (preselectedId && v.id === preselectedId && !isRented) {
+              opt.selected = true;
+            }
+            select.appendChild(opt);
+          });
+
+          // Select first available if none selected
+          if (!select.value) {
+            const firstAvailable = vehicles.find(v => v.status.toLowerCase() === 'tersedia');
+            if (firstAvailable) select.value = firstAvailable.id;
+          }
+
+          updateSelectedVehicle();
+        }
+      } catch (err) {
+        console.error('Error fetching vehicles:', err);
+      }
+    }
+
+    function updateSelectedVehicle() {
+      const select = document.getElementById('vehicleId');
+      selectedVehicle = vehicles.find(v => v.id === select.value);
+      if (selectedVehicle) {
+        document.getElementById('summaryVehicleImg').src = selectedVehicle.image;
+        document.getElementById('summaryVehicleName').innerText = selectedVehicle.name;
+        document.getElementById('summaryVehiclePlate').innerText = selectedVehicle.plateNumber + ' • GPS: ' + selectedVehicle.gpsId;
+        document.getElementById('summaryVehiclePrice').innerText = 'Rp ' + selectedVehicle.dailyRate.toLocaleString('id-ID') + ' / hari';
+      }
+      calculateTotals();
+    }
+
+    function calculateTotals() {
+      if (!selectedVehicle) return;
+
+      const daysInput = document.getElementById('durationDays');
+      let days = parseInt(daysInput.value, 10);
+      if (isNaN(days) || days < 1) days = 1;
+
+      const subtotal = selectedVehicle.dailyRate * days;
+      const deposit = 100000;
+      const total = subtotal + deposit;
+
+      document.getElementById('summaryDays').innerText = `${days} Hari`;
+      document.getElementById('summarySubtotal').innerText = 'Rp ' + subtotal.toLocaleString('id-ID');
+      document.getElementById('summaryTotal').innerText = 'Rp ' + total.toLocaleString('id-ID');
+
+      // Update return date estimate
+      const startDateVal = document.getElementById('startDate').value;
+      if (startDateVal) {
+        const start = new Date(startDateVal);
+        const returnDate = new Date(start);
+        returnDate.setDate(start.getDate() + days);
+        document.getElementById('returnDateInfo').innerText = `Estimasi Pengembalian: ${returnDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}`;
+      }
+    }
+
+    function previewImage(input, previewDivId) {
+      const previewDiv = document.getElementById(previewDivId);
+      const img = previewDiv.querySelector('img');
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          img.src = e.target.result;
+          previewDiv.classList.remove('hidden');
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    // Set today as default start date
+    function initDates() {
+      const today = new Date().toISOString().split('T')[0];
+      const startDateInput = document.getElementById('startDate');
+      startDateInput.value = today;
+      startDateInput.min = today;
+    }
+
+    // Form submission handler
+    document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Memproses Pengajuan...';
+
+      try {
+        const formData = new FormData(this);
+
+        const res = await fetch('/api/rentals', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await res.json();
+        if (result.success) {
+          window.location.href = `/booking-success.html?id=${result.rentalId}`;
+        } else {
+          alert('Gagal mengajukan pinjaman: ' + (result.message || 'Periksa input Anda'));
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-check"></i> Konfirmasi & Ajukan Pinjaman';
+        }
+      } catch (err) {
+        console.error('Submission error:', err);
+        alert('Terjadi kesalahan jaringan atau server');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Konfirmasi & Ajukan Pinjaman';
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initPickerMap();
+      initDates();
+      loadVehiclesDropdown();
+
+      document.getElementById('vehicleId').addEventListener('change', updateSelectedVehicle);
+      document.getElementById('durationDays').addEventListener('input', calculateTotals);
+      document.getElementById('startDate').addEventListener('change', calculateTotals);
+    });
+  </script>
+</body>
+</html>

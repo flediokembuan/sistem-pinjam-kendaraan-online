@@ -1,0 +1,95 @@
+[
+  {
+    "id": "RNT-20261015-001",
+    "vehicleId": "MTR-001",
+    "vehicleName": "Honda Vario 160cc",
+    "vehiclePlate": "DB 4521 KL",
+    "borrower": {
+      "fullName": "Fledio Jonathan",
+      "nik": "7102172408010003",
+      "phone": "081234567890",
+      "email": "fledio@student.unklab.ac.id",
+      "address": "Airmadidi Bawah, Minahasa Utara",
+      "selfiePhoto": "/uploads/selfie/sample-selfie1.jpg",
+      "ktpPhoto": "/uploads/ktp/sample-ktp1.jpg",
+      "guaranteeType": "KTP Asli + Kartu Tanda Mahasiswa (KTM) UNKLAB",
+      "guaranteeNote": "KTM & KTP fisik dititipkan di kantor selama masa sewa"
+    },
+    "rental": {
+      "durationDays": 3,
+      "startDate": "2026-10-15",
+      "endDate": "2026-10-18",
+      "pickupLocation": "Kampus UNKLAB Gate 1, Airmadidi",
+      "pickupLat": 1.4170,
+      "pickupLng": 124.9829,
+      "dailyRate": 90000,
+      "totalCost": 270000,
+      "deposit": 100000,
+      "paymentStatus": "LUNAS",
+      "rentalStatus": "Berjalan",
+      "bookedAt": "2026-10-15 08:30"
+    }
+  },
+  {
+    "id": "RNT-20261015-002",
+    "vehicleId": "MTR-002",
+    "vehicleName": "Yamaha NMAX 155 Connected",
+    "vehiclePlate": "DB 3188 QA",
+    "borrower": {
+      "fullName": "Gabriella Manoppo",
+      "nik": "7171015509980002",
+      "phone": "082187654321",
+      "email": "gabriella.m@gmail.com",
+      "address": "Malalayang Satu Barat, Manado",
+      "selfiePhoto": "/uploads/selfie/sample-selfie2.jpg",
+      "ktpPhoto": "/uploads/ktp/sample-ktp2.jpg",
+      "guaranteeType": "KTP Asli + NPWP + Deposit Tunai",
+      "guaranteeNote": "KTP ditahan dan deposit Rp 200.000"
+    },
+    "rental": {
+      "durationDays": 5,
+      "startDate": "2026-10-14",
+      "endDate": "2026-10-19",
+      "pickupLocation": "Bandara Sam Ratulangi (Arrival Gate)",
+      "pickupLat": 1.5498,
+      "pickupLng": 124.9262,
+      "dailyRate": 120000,
+      "totalCost": 600000,
+      "deposit": 200000,
+      "paymentStatus": "LUNAS",
+      "rentalStatus": "Berjalan",
+      "bookedAt": "2026-10-14 10:15"
+    }
+  },
+  {
+    "id": "RNT-20261015-003",
+    "vehicleId": "MTR-004",
+    "vehicleName": "Vespa Primavera 150 i-Get",
+    "vehiclePlate": "DB 2201 AB",
+    "borrower": {
+      "fullName": "Christian Wowor",
+      "nik": "7171031204990005",
+      "phone": "085399887766",
+      "email": "christian.w@yahoo.com",
+      "address": "Wenang, Manado",
+      "selfiePhoto": "/uploads/selfie/sample-selfie3.jpg",
+      "ktpPhoto": "/uploads/ktp/sample-ktp3.jpg",
+      "guaranteeType": "KTP Asli + SIM A",
+      "guaranteeNote": "Dokumen verifikasi fisik lengkap diserahkan"
+    },
+    "rental": {
+      "durationDays": 2,
+      "startDate": "2026-10-15",
+      "endDate": "2026-10-17",
+      "pickupLocation": "Kawasan Megamas (Depan Megamall)",
+      "pickupLat": 1.4870,
+      "pickupLng": 124.8370,
+      "dailyRate": 150000,
+      "totalCost": 300000,
+      "deposit": 150000,
+      "paymentStatus": "LUNAS",
+      "rentalStatus": "Berjalan",
+      "bookedAt": "2026-10-15 09:00"
+    }
+  }
+]

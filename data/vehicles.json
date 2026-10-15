@@ -1,0 +1,128 @@
+[
+  {
+    "id": "MTR-001",
+    "name": "Honda Vario 160cc",
+    "brand": "Honda",
+    "type": "Matic Premium",
+    "plateNumber": "DB 4521 KL",
+    "year": 2023,
+    "dailyRate": 90000,
+    "image": "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=600&auto=format&fit=crop&q=80",
+    "status": "dipinjam",
+    "gpsId": "GPS-TRK-01",
+    "gps": {
+      "lat": 1.4172,
+      "lng": 124.9830,
+      "address": "Jl. Arnold Mononutu, Airmadidi (Dekat Kampus UNKLAB)",
+      "speed": 35,
+      "battery": "94%",
+      "engineStatus": "ON",
+      "lastUpdated": "2026-10-15 14:45"
+    }
+  },
+  {
+    "id": "MTR-002",
+    "name": "Yamaha NMAX 155 Connected",
+    "brand": "Yamaha",
+    "type": "Maxi Scooter",
+    "plateNumber": "DB 3188 QA",
+    "year": 2024,
+    "dailyRate": 120000,
+    "image": "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600&auto=format&fit=crop&q=80",
+    "status": "dipinjam",
+    "gpsId": "GPS-TRK-02",
+    "gps": {
+      "lat": 1.4820,
+      "lng": 124.8385,
+      "address": "Kawasan Megamas Boulevard, Manado",
+      "speed": 42,
+      "battery": "88%",
+      "engineStatus": "ON",
+      "lastUpdated": "2026-10-15 15:00"
+    }
+  },
+  {
+    "id": "MTR-003",
+    "name": "Honda Beat Deluxe",
+    "brand": "Honda",
+    "type": "Matic Hemat",
+    "plateNumber": "DB 5590 FG",
+    "year": 2023,
+    "dailyRate": 70000,
+    "image": "https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=600&auto=format&fit=crop&q=80",
+    "status": "tersedia",
+    "gpsId": "GPS-TRK-03",
+    "gps": {
+      "lat": 1.4230,
+      "lng": 124.9780,
+      "address": "Pool Rental Utama, Jl. Raya Manado-Bitung Km 12",
+      "speed": 0,
+      "battery": "100%",
+      "engineStatus": "OFF",
+      "lastUpdated": "2026-10-15 13:20"
+    }
+  },
+  {
+    "id": "MTR-004",
+    "name": "Vespa Primavera 150 i-Get",
+    "brand": "Vespa",
+    "type": "Classic Modern",
+    "plateNumber": "DB 2201 AB",
+    "year": 2023,
+    "dailyRate": 150000,
+    "image": "https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?w=600&auto=format&fit=crop&q=80",
+    "status": "dipinjam",
+    "gpsId": "GPS-TRK-04",
+    "gps": {
+      "lat": 1.4645,
+      "lng": 124.8420,
+      "address": "Jl. Sam Ratulangi No. 45, Manado",
+      "speed": 22,
+      "battery": "76%",
+      "engineStatus": "ON",
+      "lastUpdated": "2026-10-15 14:52"
+    }
+  },
+  {
+    "id": "MTR-005",
+    "name": "Kawasaki KLX 150 BF",
+    "brand": "Kawasaki",
+    "type": "Trail / Adventure",
+    "plateNumber": "DB 6732 TR",
+    "year": 2022,
+    "dailyRate": 135000,
+    "image": "https://images.unsplash.com/photo-1558981420-87aa9dad1c89?w=600&auto=format&fit=crop&q=80",
+    "status": "tersedia",
+    "gpsId": "GPS-TRK-05",
+    "gps": {
+      "lat": 1.4230,
+      "lng": 124.9780,
+      "address": "Pool Rental Utama, Jl. Raya Manado-Bitung Km 12",
+      "speed": 0,
+      "battery": "100%",
+      "engineStatus": "OFF",
+      "lastUpdated": "2026-10-15 12:00"
+    }
+  },
+  {
+    "id": "MTR-006",
+    "name": "Yamaha Aerox 155 VVA CyberCity",
+    "brand": "Yamaha",
+    "type": "Sport Matic",
+    "plateNumber": "DB 4099 CZ",
+    "year": 2024,
+    "dailyRate": 110000,
+    "image": "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600&auto=format&fit=crop&q=80",
+    "status": "tersedia",
+    "gpsId": "GPS-TRK-06",
+    "gps": {
+      "lat": 1.4230,
+      "lng": 124.9780,
+      "address": "Pool Rental Utama, Jl. Raya Manado-Bitung Km 12",
+      "speed": 0,
+      "battery": "100%",
+      "engineStatus": "OFF",
+      "lastUpdated": "2026-10-15 13:00"
+    }
+  }
+]

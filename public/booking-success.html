@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Konfirmasi Peminjaman Berhasil - MotoPinjam</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex items-center justify-center p-4">
+
+  <div class="max-w-xl w-full bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden my-8">
+    
+    <!-- Top Banner Success -->
+    <div class="bg-gradient-to-r from-emerald-500 to-teal-600 p-8 text-center text-white relative">
+      <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 backdrop-blur shadow-inner">
+        <i class="fa-solid fa-circle-check text-3xl text-white"></i>
+      </div>
+      <h1 class="text-2xl font-black">Peminjaman Berhasil Diajukan!</h1>
+      <p class="text-emerald-100 text-xs mt-1">Sistem GPS pada kendaraan telah diaktifkan untuk unit Anda.</p>
+    </div>
+
+    <!-- Booking Ticket Details -->
+    <div class="p-6 sm:p-8 space-y-6">
+      
+      <!-- Rental ID & Status Pill -->
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+        <div>
+          <span class="text-[11px] font-bold text-slate-600 uppercase tracking-wider">KODE BOOKING</span>
+          <div id="bookingId" class="text-lg font-mono font-black text-blue-600">MEMUAT...</div>
+        </div>
+        <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 border border-amber-200">
+          Status: Berjalan / Aktif
+        </span>
+      </div>
+
+      <!-- Detail Card -->
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-3 text-xs">
+        <div class="flex justify-between items-center">
+          <span class="text-slate-600">Merek & Unit Motor:</span>
+          <span id="vehicleName" class="font-bold text-slate-800">-</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-slate-600">Plat Nomor:</span>
+          <span id="vehiclePlate" class="font-mono font-bold text-slate-800 bg-white px-2 py-0.5 rounded border border-slate-200">-</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-slate-600">Durasi Peminjaman:</span>
+          <span id="duration" class="font-bold text-blue-600">- Hari</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-slate-600">Periode Sewa:</span>
+          <span id="dates" class="font-medium text-slate-700">-</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-slate-600">Lokasi Penjemputan:</span>
+          <span id="pickupLocation" class="font-medium text-slate-800 text-right max-w-[200px] truncate">-</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-slate-600">Peminjam:</span>
+          <span id="borrowerName" class="font-bold text-slate-800">-</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-slate-600">Dokumen Jaminan:</span>
+          <span id="guarantee" class="font-medium text-slate-700 text-right max-w-[220px] truncate">KTP & Foto Wajah</span>
+        </div>
+        <div class="flex justify-between items-center pt-2 border-t border-slate-200">
+          <span class="font-bold text-slate-700">Total Biaya + Deposit:</span>
+          <span id="totalCost" class="font-extrabold text-blue-600 text-sm">Rp 0</span>
+        </div>
+      </div>
+
+      <!-- GPS Tracking Notice -->
+      <div class="p-4 rounded-xl bg-blue-50 border border-blue-200/60 flex items-start gap-3">
+        <div class="text-blue-600 text-xl shrink-0 mt-0.5">
+          <i class="fa-solid fa-satellite-dish"></i>
+        </div>
+        <div>
+          <h4 class="font-bold text-xs text-blue-900">Perangkat GPS Detector Aktif</h4>
+          <p class="text-[11px] text-blue-700 mt-0.5 leading-relaxed">
+            Unit kendaraan telah dilengkapi sensor pelacak GPS live 24 jam. Admin rental dapat memantau posisi dan keamanan motor di sistem radar peta secara langsung.
+          </p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-3 pt-2">
+        <a href="/login" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md">
+          <i class="fa-solid fa-map-location-dot text-emerald-400"></i>
+          <span>Buka Dashboard Admin (Lihat GPS Kendaraan di Peta)</span>
+        </a>
+
+        <a href="/" class="w-full py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center gap-2 border border-slate-200">
+          <i class="fa-solid fa-house"></i>
+          <span>Kembali ke Halaman Utama</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    async function loadRentalDetails() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const rentalId = urlParams.get('id');
+
+      if (!rentalId) {
+        document.getElementById('bookingId').innerText = 'KODE TIDAK DITEMUKAN';
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/rentals/${rentalId}`);
+        const json = await res.json();
+        if (json.success) {
+          const r = json.data;
+          document.getElementById('bookingId').innerText = r.id;
+          document.getElementById('vehicleName').innerText = r.vehicleName;
+          document.getElementById('vehiclePlate').innerText = r.vehiclePlate;
+          document.getElementById('duration').innerText = `${r.rental.durationDays} Hari`;
+          document.getElementById('dates').innerText = `${r.rental.startDate} s/d ${r.rental.endDate}`;
+          document.getElementById('pickupLocation').innerText = r.rental.pickupLocation;
+          document.getElementById('borrowerName').innerText = r.borrower.fullName;
+          document.getElementById('guarantee').innerText = r.borrower.guaranteeType;
+          
+          const total = (r.rental.totalCost || 0) + (r.rental.deposit || 0);
+          document.getElementById('totalCost').innerText = 'Rp ' + total.toLocaleString('id-ID');
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadRentalDetails);
+  </script>
+</body>
+</html>
